@@ -1,8 +1,9 @@
 {
   "name": "tika-server-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A client for Apache's tika-server",
   "main": "src/tika-server-client.js",
+  "readme": "README.md",
   "scripts": {
     "test": "mocha"
   },
