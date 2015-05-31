@@ -1,0 +1,31 @@
+{
+  "name": "tika-server-client",
+  "version": "0.0.0",
+  "description": "A client for Apache's tika-server",
+  "main": "src/tika-server-client.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CanTireInnovations/tika-server-client-node.git"
+  },
+  "keywords": [
+    "tika",
+    "client"
+  ],
+  "author": "Jeff Ashton",
+  "license": "None",
+  "bugs": {
+    "url": "https://github.com/CanTireInnovations/tika-server-client-node/issues"
+  },
+  "dependencies": {
+    "request-promise": "~0.4.2",
+    "bluebird": "~2.9.27"
+  },
+  "devDependencies": {
+    "mocha": "~2.2.5",
+    "static-server": "~2.0.0",
+    "ip": "~0.3.2"
+  }
+}
