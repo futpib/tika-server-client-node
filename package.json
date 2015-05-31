@@ -1,6 +1,6 @@
 {
   "name": "tika-server-client",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A client for Apache's tika-server",
   "main": "src/tika-server-client.js",
   "scripts": {
