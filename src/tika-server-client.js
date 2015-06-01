@@ -160,15 +160,21 @@ tikaServerClient.prototype.detailedParsers = function() {
     return getResource( this._host, '/parsers/details' );
 }
 
-tikaServerClient.prototype.ping = function() {
+tikaServerClient.prototype.version = function() {
 
     var request = {
-        method: 'HEAD',
-        uri: this._host
+        method: 'GET',
+        uri: url.resolve( this._host, "/version" ),
+        headers: {
+            Accept: 'text/plain'
+        }
     };
 
     return rp( request )
-        .then( function () { return true; } );
+        .then( function( version ) {
+            version = version.trim();
+            return version;
+        });
 }
 
 module.exports = tikaServerClient;

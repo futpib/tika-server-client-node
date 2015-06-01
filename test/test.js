@@ -67,26 +67,6 @@ describe('tika-server-client', function() {
         });
 
         // ----------------------------------------------------------------------------
-        // ping
-        // ----------------------------------------------------------------------------
-
-        describe('ping', function () {
-
-            it('should return true', function (done) {
-
-                tika.ping()
-                    .then( function( health ) {
-
-                        assert.equal( health, true );
-                        done();
-                    })
-                    .catch( function (reason ) {
-                        done( reason );
-                    });
-            });
-        });
-
-        // ----------------------------------------------------------------------------
         // metaFromFile
         // ----------------------------------------------------------------------------
 
@@ -299,6 +279,24 @@ describe('tika-server-client', function() {
                     .then(function( parsers ) {
 
                         assert.equal( parsers.name, "org.apache.tika.parser.DefaultParser" );
+                        done();
+                    })
+                    .catch(function (reason) {
+                        done(reason);
+                    });
+            });
+        });
+
+        describe('version', function () {
+
+            it('should return versions', function (done) {
+
+                tika.version()
+                    .then(function( version ) {
+
+                        var leading = version.substr( 0, 11 );
+                        assert.equal( leading, 'Apache Tika' );
+
                         done();
                     })
                     .catch(function (reason) {
