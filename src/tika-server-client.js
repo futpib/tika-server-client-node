@@ -1,5 +1,6 @@
-var fs = require( 'fs'),
-    Promise = require( 'bluebird'),
+var fs = require( 'fs' ),
+    fsPath = require( 'path' ),
+    Promise = require( 'bluebird' ),
     rp = require( 'request-promise' ),
     url = require( 'url' );
 
@@ -11,6 +12,7 @@ function tikaServerClient( host ) {
 
     if( typeof host == 'string' || host instanceof String ) {
 
+        this._host = host;
         this._metaUrl = url.resolve( host, '/meta' );
         this._tikaUrl = url.resolve( host, '/tika' );
 
@@ -18,6 +20,13 @@ function tikaServerClient( host ) {
         throw new Error( 'host must be a string' );
     }
 }
+
+function addContentDispositionHeader( request,  path ) {
+
+    var filename = fsPath.basename( path );
+    request.headers[ 'Content-Disposition' ] = 'attachment; filename=' + filename;
+}
+
 
 function openFileStream( path ) {
 
@@ -54,6 +63,7 @@ tikaServerClient.prototype.metaFromFile = function( path ) {
             "Accept": 'application/json'
         }
     };
+    addContentDispositionHeader( request, path );
 
     return openFileStream( path )
         .then( function( stream ) {
@@ -75,6 +85,7 @@ tikaServerClient.prototype.tikaFromFile = function( path ) {
             "Accept": 'text/plain'
         }
     };
+    addContentDispositionHeader( request, path );
 
     return openFileStream( path )
         .then( function( stream ) {
@@ -101,7 +112,6 @@ tikaServerClient.prototype.metaFromUrl = function( url ) {
         });
 }
 
-
 tikaServerClient.prototype.tikaFromUrl = function( url ) {
 
     var request = {
@@ -114,6 +124,51 @@ tikaServerClient.prototype.tikaFromUrl = function( url ) {
     };
 
     return rp( request );
+}
+
+function getResource( host, resource ) {
+
+    var request = {
+        method: 'GET',
+        uri: url.resolve( host, resource ),
+        headers: {
+            "Accept": 'application/json'
+        }
+    };
+
+    return rp( request )
+        .then( function( json ) {
+
+            var meta = JSON.parse( json );
+            return meta;
+        });
+}
+
+tikaServerClient.prototype.mimeTypes = function() {
+    return getResource( this._host, '/mime-types' );
+}
+
+tikaServerClient.prototype.detectors = function() {
+    return getResource( this._host, '/detectors' );
+}
+
+tikaServerClient.prototype.parsers = function() {
+    return getResource( this._host, '/parsers' );
+}
+
+tikaServerClient.prototype.detailedParsers = function() {
+    return getResource( this._host, '/parsers/details' );
+}
+
+tikaServerClient.prototype.ping = function() {
+
+    var request = {
+        method: 'HEAD',
+        uri: this._host
+    };
+
+    return rp( request )
+        .then( function () { return true; } );
 }
 
 module.exports = tikaServerClient;

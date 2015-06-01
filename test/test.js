@@ -67,6 +67,26 @@ describe('tika-server-client', function() {
         });
 
         // ----------------------------------------------------------------------------
+        // ping
+        // ----------------------------------------------------------------------------
+
+        describe('ping', function () {
+
+            it('should return true', function (done) {
+
+                tika.ping()
+                    .then( function( health ) {
+
+                        assert.equal( health, true );
+                        done();
+                    })
+                    .catch( function (reason ) {
+                        done( reason );
+                    });
+            });
+        });
+
+        // ----------------------------------------------------------------------------
         // metaFromFile
         // ----------------------------------------------------------------------------
 
@@ -214,6 +234,75 @@ describe('tika-server-client', function() {
                     })
                     .catch( function( reason ) {
                         done( reason );
+                    });
+            });
+        });
+
+        // ----------------------------------------------------------------------------
+        // Information Services
+        // ----------------------------------------------------------------------------
+
+        describe('mimeTypes', function () {
+
+            it('should return mime types', function (done) {
+
+                tika.mimeTypes()
+                    .then(function( mimeTypes ) {
+
+                        var json = mimeTypes[ "application/json" ];
+                        assert.equal( json.supertype, "application/javascript" );
+                        done();
+                    })
+                    .catch(function (reason) {
+                        done(reason);
+                    });
+            });
+        });
+
+        describe('detectors', function () {
+
+            it('should return detectors', function (done) {
+
+                tika.detectors()
+                    .then(function( detectors ) {
+
+                        assert.equal( detectors.name, "org.apache.tika.detect.DefaultDetector" );
+                        done();
+                    })
+                    .catch(function (reason) {
+                        done(reason);
+                    });
+            });
+        });
+
+        describe('parsers', function () {
+
+            it('should return parsers', function (done) {
+
+                tika.parsers()
+                    .then(function( parsers ) {
+
+                        assert.equal( parsers.name, "org.apache.tika.parser.DefaultParser" );
+                        done();
+                    })
+                    .catch(function (reason) {
+                        done(reason);
+                    });
+            });
+        });
+
+        describe('detailedParsers', function () {
+
+            it('should return detailed parsers', function (done) {
+
+                tika.detailedParsers()
+                    .then(function( parsers ) {
+
+                        assert.equal( parsers.name, "org.apache.tika.parser.DefaultParser" );
+                        done();
+                    })
+                    .catch(function (reason) {
+                        done(reason);
                     });
             });
         });
