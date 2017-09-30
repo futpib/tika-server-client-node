@@ -21,12 +21,13 @@
     "url": "https://github.com/CanTireInnovations/tika-server-client-node/issues"
   },
   "dependencies": {
-    "request-promise": "~0.4.2",
-    "bluebird": "~2.9.27"
+    "bluebird": "~2.9.27",
+    "request-promise": "~0.4.2"
   },
   "devDependencies": {
+    "ip": "~0.3.2",
     "mocha": "~2.2.5",
-    "static-server": "~2.0.0",
-    "ip": "~0.3.2"
+    "request": "^2.83.0",
+    "static-server": "~2.0.0"
   }
 }

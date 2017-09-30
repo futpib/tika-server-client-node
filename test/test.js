@@ -2,7 +2,9 @@ var assert = require( 'assert')
     ip = require( 'ip' ),
     StaticServer = require('static-server'),
     TikaClient = require( '..' ),
-    url = require( 'url' );
+    url = require( 'url' ),
+    request = require( 'request' ),
+    fs = require( 'fs' );
 
 var httpPort = 44444;
 
@@ -215,6 +217,145 @@ describe('tika-server-client', function() {
                     .catch( function( reason ) {
                         done( reason );
                     });
+            });
+        });
+
+        // ----------------------------------------------------------------------------
+        // metaFromStream
+        // ----------------------------------------------------------------------------
+
+        describe('metaFromStream', function () {
+
+            describe('from request', function () {
+
+                it('should return meta data (HTML)', function (done) {
+
+                    tika.metaFromStream( request( serverBaseUrl + '/test.html' ) )
+                        .then( function ( meta ) {
+
+                            var contentType = meta[ "Content-Type" ];
+                            assert.equal( contentType, 'text/html; charset=UTF-8' );
+
+                            done();
+                        })
+                        .catch( function( reason ) {
+                            done( reason );
+                        });
+                });
+
+                it('should return meta data (ODT)', function (done) {
+
+                    tika.metaFromStream( request( serverBaseUrl + '/test.odt' ) )
+                        .then( function ( meta ) {
+
+                            var contentType = meta[ "Content-Type" ];
+                            assert.equal( contentType, 'application/vnd.oasis.opendocument.text' );
+
+                            done();
+                        })
+                        .catch( function( reason ) {
+                            done( reason );
+                        });
+                });
+
+            });
+
+            describe('from filesystem', function () {
+
+                it('should return meta data (HTML)', function (done) {
+
+                    tika.metaFromStream( fs.createReadStream( 'test/resources/test.html' ) )
+                        .then( function ( meta ) {
+
+                            var contentType = meta[ "Content-Type" ];
+                            assert.equal( contentType, 'text/html; charset=UTF-8' );
+
+                            done();
+                        })
+                        .catch( function( reason ) {
+                            done( reason );
+                        });
+                });
+
+                it('should return meta data (ODT)', function (done) {
+
+                    tika.metaFromStream( fs.createReadStream( 'test/resources/test.odt' ) )
+                        .then( function ( meta ) {
+
+                            var contentType = meta[ "Content-Type" ];
+                            assert.equal( contentType, 'application/vnd.oasis.opendocument.text' );
+
+                            done();
+                        })
+                        .catch( function( reason ) {
+                            done( reason );
+                        });
+                });
+            });
+        });
+
+        // ----------------------------------------------------------------------------
+        // tikaFromStream
+        // ----------------------------------------------------------------------------
+
+        describe('tikaFromStream', function () {
+
+            describe('from request', function () {
+
+                it('should return text (HTML)', function (done) {
+
+                    tika.tikaFromStream( request( serverBaseUrl + '/test.html' ) )
+                        .then( function ( text ) {
+
+                            assert.equal( text.trim(), 'This is an html file.' );
+                            done();
+                        })
+                        .catch( function( reason ) {
+                            done( reason );
+                        });
+                });
+
+                it('should return text (ODT)', function (done) {
+
+                    tika.tikaFromStream( request( serverBaseUrl + '/test.odt' ) )
+                        .then( function ( text ) {
+
+                            assert.equal( text.trim(), 'This is an odt file.' );
+                            done();
+                        })
+                        .catch( function( reason ) {
+                            done( reason );
+                        });
+                });
+            });
+
+            describe('from filesystem', function () {
+
+                it('should return text (HTML)', function (done) {
+
+                    tika.tikaFromStream( fs.createReadStream( 'test/resources/test.html' ) )
+                        .then( function ( text ) {
+
+                            assert.equal( text.trim(), 'This is an html file.' );
+                            done();
+                        })
+                        .catch( function( reason ) {
+                            done( reason );
+                        });
+                });
+
+                it('should return text (ODT)', function (done) {
+
+                    tika.tikaFromStream( fs.createReadStream( 'test/resources/test.odt' ) )
+                        .then( function ( text ) {
+
+                            assert.equal( text.trim(), 'This is an odt file.' );
+                            done();
+                        })
+                        .catch( function( reason ) {
+                            done( reason );
+                        });
+                });
             });
         });
 

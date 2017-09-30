@@ -126,6 +126,39 @@ tikaServerClient.prototype.tikaFromUrl = function( url ) {
     return rp( request );
 }
 
+tikaServerClient.prototype.metaFromStream = function( readableStream ) {
+
+    var request = {
+        method: 'PUT',
+        uri: this._metaUrl,
+        headers: {
+            "Accept": 'application/json'
+        },
+        body: readableStream
+    };
+
+    return rp( request )
+        .then( function( json ) {
+
+            var meta = JSON.parse( json );
+            return meta;
+        });
+}
+
+tikaServerClient.prototype.tikaFromStream = function( readableStream ) {
+
+    var request = {
+        method: 'PUT',
+        uri: this._tikaUrl,
+        headers: {
+            "Accept": 'text/plain'
+        },
+        body: readableStream
+    };
+
+    return rp( request );
+}
+
 function getResource( host, resource ) {
 
     var request = {
