@@ -132,7 +132,8 @@ tikaServerClient.prototype.metaFromStream = function( readableStream ) {
         method: 'PUT',
         uri: this._metaUrl,
         headers: {
-            "Accept": 'application/json'
+            "Accept": 'application/json',
+            "Content-Type": "application/octet-stream"
         },
         body: readableStream
     };
@@ -151,7 +152,8 @@ tikaServerClient.prototype.tikaFromStream = function( readableStream ) {
         method: 'PUT',
         uri: this._tikaUrl,
         headers: {
-            "Accept": 'text/plain'
+            "Accept": 'text/plain',
+            "Content-Type": "application/octet-stream"
         },
         body: readableStream
     };
